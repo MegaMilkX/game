@@ -32,30 +32,27 @@ public:
         shader = GFXS::RGBA();
         shader.Compile();
 
-        GFXGlobal<mat4f>::Get("MatrixModel") = transform.GetTransform();
-        GFXGlobal<mat4f>::Get("MatrixView") = camera_transform.GetTransform();
-        GFXGlobal<mat4f>::Get("MatrixPerspective") = perspective_;
-
-        GFXGlobal<mat4f> model = GFXGlobal<mat4f>::Get("MatrixModel");
-        model = transform.GetTransform();
+        GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
+        GFXGlobal<mat4f>::Get("MatrixView0") = camera_transform.GetTransform();
+        GFXGlobal<mat4f>::Get("MatrixPerspective0") = perspective_;
     }
     void OnSwitch()
     {
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         mesh->Bind();
-        shader.Bind();
     }
     void OnUpdate()
     {
         time = GetTickCount();
-        transform.Rotate(0.0001f, vec3f(0.0f, 1.0f, 0.0f));
-        transform.Rotate(-0.0005f, vec3f(1.0f, 0.0f, 0.0f));
-        
-        
+        transform.Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
+        transform.Rotate(-0.05f, vec3f(1.0f, 0.0f, 0.0f));
+        GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
+        shader.Bind();
+        /*
         if (time - start_time >= 5000)
         {
             GameState::Pop();
-        }
+        }*/
     }
     void OnRender()
     {
