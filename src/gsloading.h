@@ -19,22 +19,34 @@ public:
         //shader = Resource<GFXMesh>::Get("shader");
         
         perspective_ = ::perspective(1.5f, 16.0f/9.0f, 0.1f, 100.0f);
-        camera_transform.Translate(0.0f, -0.0f, -2.0f);
-        
+        camera_transform.Translate(0.0f, -0.0f, -1.7f);
+
+        ResHdl<GFXTexture2D> texture = Resource<GFXTexture2D>::Get("250px-162Furret");
+        texture->Use(0);
         
         GFXS::Position3D pos3d;
         pos3d.pos = GFXS::Position();
-        shader = pos3d;
+        shader.Transform(pos3d);
         GFXS::Texture2DColor tex2dcol;
         tex2dcol.texture_sampler = GFXS::Texture2D();
         tex2dcol.uv = GFXS::UV();
         //shader = tex2dcol;
-        shader = GFXS::RGBA();
+        //GFXS::Multiply3f mult;
+        //mult.a = GFXS::Position();
+        //mult.b = GFXS::Normal();
+        shader.Color(tex2dcol);
         shader.Compile();
+
+        std::cout << shader.StatusString();
 
         GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
         GFXGlobal<mat4f>::Get("MatrixView0") = camera_transform.GetTransform();
         GFXGlobal<mat4f>::Get("MatrixPerspective0") = perspective_;
+        GFXGlobal<int>::Get("Texture2D0") = 0;
+
+        std::string validate_result;
+        shader.Validate(validate_result);
+        std::cout << validate_result;
     }
     void OnSwitch()
     {
