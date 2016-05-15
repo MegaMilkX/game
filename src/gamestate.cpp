@@ -5,7 +5,7 @@ Window GameState::window;
 
 bool GameState::Init()
 {
-    window = Window::Create(L"game");
+    window = Window::Create(L"game", 1280, 720);
     
     GFXTarget* gfxTarget = GFXInit(window.GetHandle());
     if(!gfxTarget)
@@ -17,6 +17,7 @@ bool GameState::Init()
     Resource<GFXMesh>::AddSearchPath("data\\meshes");
     Resource<GFXShader>::AddSearchPath("data\\shaders");
     Resource<GFXTexture2D>::AddSearchPath("data\\textures");
+    Resource<GFXFont>::AddSearchPath("data\\fonts");
     
     return true;
 }

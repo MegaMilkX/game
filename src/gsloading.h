@@ -14,44 +14,34 @@ public:
         start_time = GetTickCount();
         
         camera = Camera::Create(&scene);
-        
+        cube = Renderable::Create(&scene);
+
         mesh = Resource<GFXMesh>::Get("cube");
-        //shader = Resource<GFXMesh>::Get("shader");
+        shader = Resource<GFXShader>::Get("shader");
+        texture = Resource<GFXTexture2D>::Get("wallhaven-3635232");
+        texture->Use(0);
         
         perspective_ = ::perspective(1.5f, 16.0f/9.0f, 0.1f, 100.0f);
         camera_transform.Translate(0.0f, -0.0f, -1.7f);
 
-        ResHdl<GFXTexture2D> texture = Resource<GFXTexture2D>::Get("250px-162Furret");
-        texture->Use(0);
-        
-        GFXS::Position3D pos3d;
-        pos3d.pos = GFXS::Position();
-        shader.Transform(pos3d);
-        GFXS::Texture2DColor tex2dcol;
-        tex2dcol.texture_sampler = GFXS::Texture2D();
-        tex2dcol.uv = GFXS::UV();
-        //shader = tex2dcol;
-        //GFXS::Multiply3f mult;
-        //mult.a = GFXS::Position();
-        //mult.b = GFXS::Normal();
-        shader.Color(tex2dcol);
-        shader.Compile();
+        //ResHdl<GFXFont> font = Resource<GFXFont>::Get("MagicCardsNormal");
+        //font->Glyph(123, 16);
+        //font->Glyph(12, 16);
+        //font->Glyph(0xA9, 16);
+        //std::cout << "poop";
 
-        std::cout << shader.StatusString();
+        //GFXText text = GFXText::Create("magic", 16);
+        
 
         GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
         GFXGlobal<mat4f>::Get("MatrixView0") = camera_transform.GetTransform();
         GFXGlobal<mat4f>::Get("MatrixPerspective0") = perspective_;
         GFXGlobal<int>::Get("Texture2D0") = 0;
-
-        std::string validate_result;
-        shader.Validate(validate_result);
-        std::cout << validate_result;
     }
     void OnSwitch()
     {
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-        mesh->Bind();
+        
     }
     void OnUpdate()
     {
@@ -59,7 +49,7 @@ public:
         transform.Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
         transform.Rotate(-0.05f, vec3f(1.0f, 0.0f, 0.0f));
         GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
-        shader.Bind();
+        
         /*
         if (time - start_time >= 5000)
         {
@@ -69,6 +59,8 @@ public:
     void OnRender()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        mesh->Bind();
+        shader->Bind();
         mesh->Render();
     }
     void OnCleanup()
@@ -82,12 +74,13 @@ private:
     
     Scene scene;
     Camera* camera;
+    Renderable* cube;
     ResHdl<GFXMesh> mesh;
+    ResHdl<GFXShader> shader;
+    ResHdl<GFXTexture2D> texture;
     Transform camera_transform;
     Transform transform;
     mat4f perspective_;
-    
-    GFXShader shader;
 };
 
 #endif
