@@ -5,16 +5,18 @@
 
 #include "GameState.h"
 
+#include "gui.h"
+#include "scene.h"
+#include "renderable.h"
+#include "camera.h"
+
 class GSLoading : public GameState
 {
 public:
-    GSLoading() : start_time(0), time(0), scene(Scene::Create()) {}
+    GSLoading() : start_time(0), time(0) {}
     void OnInit()
-    { 
+    {
         start_time = GetTickCount();
-        
-        camera = Camera::Create(&scene);
-        cube = Renderable::Create(&scene);
 
         mesh = Resource<GFXMesh>::Get("cube");
         shader = Resource<GFXShader>::Get("shader");
@@ -37,6 +39,9 @@ public:
         GFXGlobal<mat4f>::Get("MatrixView0") = camera_transform.GetTransform();
         GFXGlobal<mat4f>::Get("MatrixPerspective0") = perspective_;
         GFXGlobal<int>::Get("Texture2D0") = 0;
+
+        Renderable* cube = Renderable::Create(scene);
+        camera = Camera::Create(scene);
     }
     void OnSwitch()
     {
@@ -59,7 +64,7 @@ public:
     void OnRender()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        mesh->Bind();
+
         shader->Bind();
         mesh->Render();
     }
@@ -69,6 +74,8 @@ public:
     }
 
 private:
+    GUI gui_loading;
+
     DWORD start_time;
     DWORD time;
     
