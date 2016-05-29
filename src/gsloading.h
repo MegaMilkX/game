@@ -24,14 +24,18 @@ public:
         GFXGlobal<int>::Get("Texture2D0") = 0;
 
         camera = scene.Add<Camera>();
-        camera->Translate(0.0f, 0.0f, -1.7f);
+        camera->Translate(0.0f, 0.0f, -2.7f);
         camera->Perspective(1.5f, 16.0f / 9.0f, 0.1f, 100.0f);
 
         cube = scene.Add<Renderable>();
         //cube->Mesh(Resource<GFXMesh>::Get("cube"));
-        //cube->Material(Resource<GFXMaterial>::Get("material"));
+        cube->Material(Resource<GFXMaterial>::Get("material"));
         cube->Translate(-0.3f, 0.0f, 0.0f);
         
+        cube2 = cube->GetNode()->AddNode()->Add<Renderable>();
+        cube2->Translate(1.4f, 0.0f, 0.0f);
+        cube2->Material(Resource<GFXMaterial>::Get("material"));
+
         LightOmni* omni = scene.Add<LightOmni>();
 
         //GUIImage* gui_image = gui.AddElement<GUIImage>();
@@ -46,6 +50,7 @@ public:
     {
         time = GetTickCount();
         cube->Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
+        cube2->Rotate(0.01f, vec3f(1.0f, 0.0f, 0.0f));
         //cube->Rotate(-0.05f, vec3f(1.0f, 0.0f, 0.0f));
         /*
         if (time - start_time >= 5000)
@@ -72,6 +77,7 @@ private:
     Scene scene;
     Camera* camera;
     Renderable* cube;
+    Renderable* cube2;
 
     GUI gui;
 };

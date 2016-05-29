@@ -37,7 +37,20 @@ public:
 
     Scene* GetScene() { return scene; }
 
-    Transform* GetTransform() { return &transform; }
+    void Translate(float x, float y, float z, Space space = LOCAL);
+    void Translate(vec3f trans, Space space = LOCAL);
+    void Rotate(float angle, float x, float y, float z, Space space = LOCAL);
+    void Rotate(float angle, vec3f axis, Space space = LOCAL);
+    void Scale(float x, float y, float z);
+    void Scale(vec3f scale);
+    void Scale(float scale);
+    mat4f GetTransform() 
+    { 
+        if (parent)
+            return parent->GetTransform() * transform.GetTransform();
+        else
+            return transform.GetTransform(); 
+    }
 private:
     Scene* scene;
     Node* parent;
@@ -49,7 +62,8 @@ private:
 template<typename ENTITY>
 ENTITY* Node::Add()
 {
-
+    ENTITY* entity = ENTITY::Create(this);
+    return entity;
 }
 
 template<typename ENTITY>

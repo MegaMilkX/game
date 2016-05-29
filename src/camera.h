@@ -4,11 +4,17 @@
 #include "scene.h"
 #include "entity.h"
 #include "renderable.h"
+#include <iostream>
 
 DEF_ENTITY
 (
-    Camera, 
+    Camera,
     Entity,
+    CONSTRUCTOR
+    (
+        matrixview = GFXGlobal<mat4f>::Get("MatrixView0");
+        matrixprojection = GFXGlobal<mat4f>::Get("MatrixPerspective0");
+    ),
     PUBLIC
     (
         void Perspective(float fov, float aspect, float znear, float zfar)
@@ -24,8 +30,8 @@ DEF_ENTITY
         void Render()
         {
             std::vector<Entity*> entities = node->GetScene()->GetEntitiesByType(TypeInfo<Renderable>::GetId());
-            GFXGlobal<mat4f>::Get("MatrixView0") = node->GetTransform()->GetTransform();
-            GFXGlobal<mat4f>::Get("MatrixPerspective0") = projection;
+            matrixview = node->GetTransform();
+            matrixprojection = projection;
 
             for (unsigned int i = 0; i < entities.size(); ++i)
             {
@@ -38,6 +44,8 @@ DEF_ENTITY
     PROTECTED
     (
         mat4f projection;
+        GFXGlobal<mat4f> matrixview;
+        GFXGlobal<mat4f> matrixprojection;
     )
 );
 

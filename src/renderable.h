@@ -12,6 +12,10 @@ DEF_ENTITY
 (
     Renderable,
     Entity,
+    CONSTRUCTOR
+    (
+        global_matrixmodel = GFXGlobal<mat4f>::Get("MatrixModel0");
+    ),
     PUBLIC
     (
         void Mesh(ResHdl<GFXMesh> mesh) { this->mesh = mesh; }
@@ -19,7 +23,7 @@ DEF_ENTITY
 
         virtual void Render()
         {
-            GFXGlobal<mat4f>::Get("MatrixModel0") = node->GetTransform()->GetTransform();
+            global_matrixmodel = node->GetTransform();
             material->Bind();
             mesh->Render();
         }
@@ -28,6 +32,7 @@ DEF_ENTITY
     (
         ResHdl<GFXMesh> mesh;
         ResHdl<GFXMaterial> material;
+        GFXGlobal<mat4f> global_matrixmodel;
     )
 );
 

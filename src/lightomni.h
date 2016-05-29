@@ -8,6 +8,7 @@ DEF_ENTITY
 (
     LightOmni,
     Entity,
+    CONSTRUCTOR(),
     PUBLIC(),
     PROTECTED()
 );

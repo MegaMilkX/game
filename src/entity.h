@@ -22,10 +22,11 @@ protected:
     Node* node;
 };
 
+#define CONSTRUCTOR(SOURCE) SOURCE
 #define PUBLIC(SOURCE) public: SOURCE
 #define PROTECTED(SOURCE) protected: SOURCE
 
-#define DEF_ENTITY(NAME, BASE, PUB, PROT) \
+#define DEF_ENTITY(NAME, BASE, CONSTRUCT, PUB, PROT) \
     class NAME : public BASE \
     { \
     public: \
@@ -34,12 +35,18 @@ protected:
             NAME* entity = new NAME(scene->Root()->AddNode()); \
             return entity; \
         } \
+        static NAME* Create(Node* node) \
+        { \
+            NAME* entity = new NAME(node); \
+            return entity; \
+        } \
     protected: \
         NAME(Node* node) : BASE(node) \
         { \
             Scene* scene = node->GetScene(); \
             scene->AddEntityType(TypeInfo<NAME>::GetId(), this); \
             node->Add<NAME>(this); \
+            CONSTRUCT \
         } \
         PUB \
         PROT \
