@@ -9,6 +9,7 @@
 #include "scene.h"
 #include "renderable.h"
 #include "camera.h"
+#include "lightomni.h"
 
 class GSLoading : public GameState
 {
@@ -18,30 +19,23 @@ public:
     {
         start_time = GetTickCount();
 
-        mesh = Resource<GFXMesh>::Get("cube");
-        shader = Resource<GFXShader>::Get("shader");
-        texture = Resource<GFXTexture2D>::Get("wallhaven-3635232");
-        texture->Use(0);
+        gui.Init();
         
-        perspective_ = ::perspective(1.5f, 16.0f/9.0f, 0.1f, 100.0f);
-        camera_transform.Translate(0.0f, -0.0f, -1.7f);
-
-        //ResHdl<GFXFont> font = Resource<GFXFont>::Get("MagicCardsNormal");
-        //font->Glyph(123, 16);
-        //font->Glyph(12, 16);
-        //font->Glyph(0xA9, 16);
-        //std::cout << "poop";
-
-        //GFXText text = GFXText::Create("magic", 16);
-        
-
-        GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
-        GFXGlobal<mat4f>::Get("MatrixView0") = camera_transform.GetTransform();
-        GFXGlobal<mat4f>::Get("MatrixPerspective0") = perspective_;
         GFXGlobal<int>::Get("Texture2D0") = 0;
 
-        Renderable* cube = Renderable::Create(scene);
-        camera = Camera::Create(scene);
+        camera = scene.Add<Camera>();
+        camera->Translate(0.0f, 0.0f, -1.7f);
+        camera->Perspective(1.5f, 16.0f / 9.0f, 0.1f, 100.0f);
+
+        cube = scene.Add<Renderable>();
+        //cube->Mesh(Resource<GFXMesh>::Get("cube"));
+        //cube->Material(Resource<GFXMaterial>::Get("material"));
+        cube->Translate(-0.3f, 0.0f, 0.0f);
+        
+        LightOmni* omni = scene.Add<LightOmni>();
+
+        //GUIImage* gui_image = gui.AddElement<GUIImage>();
+        //gui_image->
     }
     void OnSwitch()
     {
@@ -51,10 +45,8 @@ public:
     void OnUpdate()
     {
         time = GetTickCount();
-        transform.Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
-        transform.Rotate(-0.05f, vec3f(1.0f, 0.0f, 0.0f));
-        GFXGlobal<mat4f>::Get("MatrixModel0") = transform.GetTransform();
-        
+        cube->Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
+        //cube->Rotate(-0.05f, vec3f(1.0f, 0.0f, 0.0f));
         /*
         if (time - start_time >= 5000)
         {
@@ -65,8 +57,8 @@ public:
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader->Bind();
-        mesh->Render();
+        camera->Render();
+        gui.Render();
     }
     void OnCleanup()
     {
@@ -74,20 +66,14 @@ public:
     }
 
 private:
-    GUI gui_loading;
-
     DWORD start_time;
     DWORD time;
     
     Scene scene;
     Camera* camera;
     Renderable* cube;
-    ResHdl<GFXMesh> mesh;
-    ResHdl<GFXShader> shader;
-    ResHdl<GFXTexture2D> texture;
-    Transform camera_transform;
-    Transform transform;
-    mat4f perspective_;
+
+    GUI gui;
 };
 
 #endif
