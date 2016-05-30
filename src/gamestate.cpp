@@ -23,6 +23,8 @@ bool GameState::Init()
         std::cout << "GFX initialization fucked up\n";
         return false;
     }
+
+    ResourceAsync::Init(window);
     
     Resource<GFXMesh>::AddSearchPath("data\\meshes");
     Resource<GFXShader>::AddSearchPath("data\\shaders");
@@ -97,6 +99,7 @@ bool GameState::Init()
 
 void GameState::Cleanup()
 {
+    ResourceAsync::Cleanup();
     GFXCleanup();
 }
 
