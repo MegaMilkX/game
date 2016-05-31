@@ -47,7 +47,7 @@ bool GameState::Init()
         { vec3f(0.5f, 0.5f, -0.5f), vec3f(0.5f, 0.3f, 0.1f), vec2f(1.0f, 1.0f) },
         { vec3f(-0.5f, 0.5f, -0.5f), vec3f(0.5f, 0.1f, 0.1f), vec2f(0.0f, 1.0f) }
     };
-    std::vector<unsigned short> indices = { 0, 1, 2, 2, 3, 0, 3, 2, 6, 6, 7, 3, 7, 6, 5, 5, 4, 7, 4, 0, 3, 3, 7, 4, 0, 1, 5, 5, 4, 0, 1, 5, 6, 6, 2, 1 };
+    std::vector<unsigned short> indices = { 0, 1, 2, 2, 3, 0, 3, 2, 6, 6, 7, 3, 7, 6, 5, 5, 4, 7, 4, 0, 3, 3, 7, 4, 0, 5, 1, 5, 0, 4, 1, 5, 6, 6, 2, 1 };
     mesh.SetVertices(vertices);
     mesh.SetIndices(indices);
     Resource<GFXMesh>::SetFallbackData(mesh);
@@ -90,7 +90,7 @@ bool GameState::Init()
         }
     }
     texture2d.Bitmap(data, 4, 4, 3);
-    delete data;
+    delete[] data;
     Resource<GFXTexture2D>::SetFallbackData(texture2d);
     //===================
     
