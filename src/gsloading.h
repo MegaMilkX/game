@@ -28,7 +28,7 @@ public:
         camera->Perspective(1.5f, 16.0f / 9.0f, 0.1f, 100.0f);
 
         cube = scene.Add<Renderable>();
-        //cube->Mesh(Resource<GFXMesh>::Get("cube"));
+        cube->Mesh(Resource<GFXMesh>::Get("cube"));
         cube->Material(Resource<GFXMaterial>::Get("material"));
         cube->Translate(-0.3f, 0.0f, 0.0f);
         
