@@ -10,6 +10,7 @@
 #include "renderable.h"
 #include "camera.h"
 #include "lightomni.h"
+#include "bounding-shape.h"
 
 class GSLoading : public GameState
 {
@@ -31,10 +32,15 @@ public:
         cube->Mesh(Resource<GFXMesh>::Get("cube"));
         cube->Material(Resource<GFXMaterial>::Get("material"));
         cube->Translate(-0.3f, 0.0f, 0.0f);
+
+        
         
         cube2 = cube->GetNode()->AddNode()->Add<Renderable>();
         cube2->Translate(1.4f, 0.0f, 0.0f);
         cube2->Material(Resource<GFXMaterial>::Get("material"));
+
+        BBox* bbox = cube2->GetNode()->Add<BBox>();
+        bbox->Size(1.0f, 1.0f, 1.0f);
 
         LightOmni* omni = scene.Add<LightOmni>();
 
@@ -51,7 +57,10 @@ public:
         time = GetTickCount();
         cube->Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
         cube2->Rotate(0.01f, vec3f(1.0f, 0.0f, 0.0f));
+
+        
         //cube->Rotate(-0.05f, vec3f(1.0f, 0.0f, 0.0f));
+
         /*
         if (time - start_time >= 5000)
         {
@@ -63,7 +72,7 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         camera->Render();
-        gui.Render();
+        //gui.Render();
     }
     void OnCleanup()
     {

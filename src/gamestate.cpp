@@ -24,6 +24,8 @@ bool GameState::Init()
         return false;
     }
 
+    InputInit(window.GetHandle());
+
     ResourceAsync::Init(window);
     
     Resource<GFXMesh>::AddSearchPath("data\\meshes");
@@ -100,6 +102,7 @@ bool GameState::Init()
 void GameState::Cleanup()
 {
     ResourceAsync::Cleanup();
+    InputCleanup();
     GFXCleanup();
 }
 

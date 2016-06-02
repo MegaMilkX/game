@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "entity.h"
 #include "renderable.h"
+#include "bounding-shape.h"
 #include <iostream>
 
 DEF_ENTITY
@@ -38,6 +39,15 @@ DEF_ENTITY
                 Entity* entity = entities[i];
                 Renderable* renderable = (Renderable*)entity;
                 renderable->Render();
+            }
+
+            glClear(GL_DEPTH_BUFFER_BIT);
+            
+            std::vector<Entity*> shapes = node->GetScene()->GetEntitiesByType(TypeInfo<BoundingShape>::GetId());
+            for (unsigned int i = 0; i < shapes.size(); ++i)
+            {
+                BoundingShape* shape = (BoundingShape*)(shapes[i]);
+                shape->DebugRender();
             }
         }
     ),
