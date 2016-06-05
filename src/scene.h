@@ -30,6 +30,9 @@ public:
     //
     std::vector<Entity*>& GetEntitiesByType(int typeindex);
     //
+    Node* RayTest(const ray& r, vec3f& point);
+    std::vector<Node*> RayTest(const ray& r);
+
     void PrintStats()
     {
         std::cout << "Scene " << (int)this << " now has " << entities.size() << " entities of " << entity_by_type.size() << " types" << std::endl;
