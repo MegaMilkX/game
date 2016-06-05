@@ -14,3 +14,20 @@ void Node::Rotate(float angle, vec3f axis, Space space) { transform.Rotate(angle
 void Node::Scale(float x, float y, float z) { transform.Scale(x, y, z); }
 void Node::Scale(vec3f scale) { transform.Scale(scale); }
 void Node::Scale(float scale) { transform.Scale(scale); }
+
+vec3f Node::Forward()
+{
+    return -(GetTransform()[2]);
+}
+vec3f Node::Back()
+{
+    return (GetTransform()[2]);
+}
+vec3f Node::Left()
+{
+    return -(GetTransform()[0]);
+}
+vec3f Node::Right()
+{
+    return (GetTransform()[0]);
+}

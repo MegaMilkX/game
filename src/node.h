@@ -29,6 +29,11 @@ public:
         return children.back();
     }
 
+    Node* Parent()
+    {
+        return parent;
+    }
+
     template<typename ENTITY>
     ENTITY* Add();
 
@@ -44,6 +49,12 @@ public:
     void Scale(float x, float y, float z);
     void Scale(vec3f scale);
     void Scale(float scale);
+
+    vec3f Forward();
+    vec3f Back();
+    vec3f Left();
+    vec3f Right();
+
     mat4f GetTransform() 
     { 
         if (parent)

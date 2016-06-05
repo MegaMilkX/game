@@ -17,6 +17,11 @@ public:
     void Scale(float x, float y, float z);
     void Scale(vec3f scale);
     void Scale(float scale);
+
+    vec3f Forward();
+    vec3f Back();
+    vec3f Left();
+    vec3f Right();
 protected:
     Entity(Node* node);
     Node* node;

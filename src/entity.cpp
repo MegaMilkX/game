@@ -11,6 +11,11 @@ void Entity::Scale(float x, float y, float z) { node->Scale(x, y, z); }
 void Entity::Scale(vec3f scale) { node->Scale(scale); }
 void Entity::Scale(float scale) { node->Scale(scale); }
 
+vec3f Entity::Forward() { return node->Forward(); }
+vec3f Entity::Back() { return node->Back(); }
+vec3f Entity::Left() { return node->Left(); }
+vec3f Entity::Right() { return node->Right(); }
+
 Entity::Entity(Node* node) : node(node)
 {
     Scene* scene = node->GetScene();
