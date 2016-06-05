@@ -18,17 +18,17 @@
 class ActCamMove : public Action
 {
 public:
-    ActCamMove(Camera* cam) : camera(cam)
+    ActCamMove(Node* node) : camera(node)
     {}
     void Execute()
     {
-        camera->Rotate(InputMouse::GetXRel() * -0.005f, vec3f(0.0f, 1.0f, 0.0f));
-        camera->Rotate(InputMouse::GetYRel() * -0.005f, vec3f(1.0f, 0.0f, 0.0f), Space::WORLD);
+        camera->Rotate(InputMouse::GetXRel() * -0.005f, vec3f(0.0f, 1.0f, 0.0f), Space::WORLD);
+        camera->Rotate(InputMouse::GetYRel() * -0.005f, vec3f(1.0f, 0.0f, 0.0f), Space::LOCAL);
     }
 
     ActCamMove* clone() { return new ActCamMove(*this); }
 private:
-    Camera* camera;
+    Node* camera;
 };
 
 class GSLoading : public GameState

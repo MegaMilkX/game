@@ -3,6 +3,8 @@
 
 #include <libgame.h>
 
+#include "node.h"
+
 class Node;
 class Scene;
 class Entity

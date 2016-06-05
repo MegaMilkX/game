@@ -10,6 +10,7 @@ void GSLoading::OnInit()
 
     camera = scene.Add<Camera>();
     camera->Translate(0.0f, 0.0f, 2.7f);
+    camera->Rotate(0.7f, vec3f(0.0f, 1.0f, 0.0f));
     //camera->Translate(-1.0f, 1.5f, -2.7f);
     //camera->Rotate(0.5f, vec3f(0.0f, 1.0f, 0.0f));
     //camera->Rotate(0.5f, vec3f(1.0f, 0.0f, 0.0f));
@@ -42,7 +43,7 @@ void GSLoading::OnInit()
     //GUIImage* gui_image = gui.AddElement<GUIImage>();
     //gui_image->
 
-    InputMouse::SetMoveCallback(ActCamMove(camera));
+    InputMouse::SetMoveCallback(ActCamMove(camera->GetNode()));
 }
 
 void GSLoading::OnSwitch()
@@ -59,19 +60,19 @@ void GSLoading::OnUpdate()
 
     if (InputKB::Key(0x57))
     {
-        camera->Translate(camera->Forward() * 0.05f, Space::PARENT);
+        camera->Translate(camera->Forward() * 0.05f, Space::WORLD);
     }
     if (InputKB::Key(0x41))
     {
-        camera->Translate(camera->Left() * 0.05f, Space::PARENT);
+        camera->Translate(camera->Left() * 0.05f, Space::WORLD);
     }
     if (InputKB::Key(0x53))
     {
-        camera->Translate(camera->Back() * 0.05f, Space::PARENT);
+        camera->Translate(camera->Back() * 0.05f, Space::WORLD);
     }
     if (InputKB::Key(0x44))
     {
-        camera->Translate(camera->Right() * 0.05f, Space::PARENT);
+        camera->Translate(camera->Right() * 0.05f, Space::WORLD);
     }
 
     if (GetActiveWindow() == window.GetHandle())

@@ -7,6 +7,13 @@
 
 #include <libgame.h>
 
+enum Space
+{
+    LOCAL,
+    PARENT,
+    WORLD
+};
+
 //============================
 // Node
 //============================
@@ -61,6 +68,15 @@ public:
             return parent->GetTransform() * transform.GetTransform();
         else
             return transform.GetTransform(); 
+    }
+
+    void PrintEntityTypes()
+    {
+        std::map<int, Entity*>::iterator it;
+        for (it = entities.begin(); it != entities.end(); ++it)
+        {
+            std::cout << it->first << std::endl;
+        }
     }
 private:
     Scene* scene;
