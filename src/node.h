@@ -57,6 +57,13 @@ public:
     void Scale(vec3f scale);
     void Scale(float scale);
 
+    vec3f Position() { return transform.Position(); }
+    quat Rotation() { return transform.Rotation(); }
+    vec3f Scale() { return transform.Scale(); }
+
+    void Position(vec3f& position) { transform.Position(position); }
+    void Rotation(quat& rotation) { transform.Rotation(rotation); }
+
     vec3f Forward();
     vec3f Back();
     vec3f Left();

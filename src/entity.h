@@ -20,6 +20,13 @@ public:
     void Scale(vec3f scale);
     void Scale(float scale);
 
+    vec3f Position() { return node->Position(); }
+    quat Rotation() { return node->Rotation(); }
+    vec3f Scale() { return node->Scale(); }
+
+    void Position(vec3f& position) { node->Position(position); }
+    void Rotation(quat& rotation) { node->Rotation(rotation); }
+
     vec3f Forward();
     vec3f Back();
     vec3f Left();

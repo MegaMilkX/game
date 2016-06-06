@@ -104,9 +104,10 @@ void GSLoading::OnRender()
     {
         if (InputKB::Key(VK_SPACE))
         {
-            Renderable* r = scene.Add<Renderable>();
+            Renderable* r = node->AddNode()->Add<Renderable>();
             r->Material(Resource<GFXMaterial>::Get("material2"));
-            r->Translate(point);
+            vec3f pos = inverse(node->GetTransform()) * vec4f(point.x, point.y, point.z, 1.0f);
+            r->Position(pos);
             r->Scale(0.1f);
         }
 
