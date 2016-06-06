@@ -2,6 +2,7 @@
 
 std::stack<GameState*> GameState::state_stack;
 Window GameState::window;
+std::map<int, GameState*> GameState::state_cache;
 
 struct Vert
 {
@@ -25,8 +26,6 @@ bool GameState::Init()
     }
 
     InputInit(window.GetHandle());
-
-    ResourceAsync::Init(window);
     
     Resource<GFXMesh>::AddSearchPath("data\\meshes");
     Resource<GFXShader>::AddSearchPath("data\\shaders");
@@ -108,7 +107,7 @@ void GameState::Cleanup()
 
 void GameState::Pop()
 {
-    delete state_stack.top();
+	GameState* state = state_stack.top();
     state_stack.pop();
     if(state_stack.size()>0)
         state_stack.top()->OnSwitch();

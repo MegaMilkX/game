@@ -2,6 +2,7 @@
 #define _GAMESTATE_H_
 
 #include <stack>
+#include <map>
 #include <iostream>
 
 #include <libgame.h>
@@ -21,22 +22,37 @@ public:
     static void Cleanup();
 
     template<typename T>
-    static void Push();
+    static T* Push();
     static void Pop();
 
     static bool Update();
 protected:
     static std::stack<GameState*> state_stack;
+	static std::map<int, GameState*> state_cache;
     static Window window;
+
+	int type_index;
 };
 
 template<typename T>
-void GameState::Push()
+T* GameState::Push()
 {
-    T* state = new T();
+	std::map<int, GameState*>::iterator it = state_cache.find(TypeInfo<T>::GetId());
+	GameState* state = 0;
+	if (it == state_cache.end())
+	{
+		state = new T();
+		state->type_index = TypeInfo<T>::GetId();
+		state_cache.insert(std::make_pair(state->type_index, state));
+		state->OnInit();
+	}
+	else
+		state = it->second;
+
     state_stack.push(state);
-    state->OnInit();
     state->OnSwitch();
+
+	return (T*)state;
 }
 
 #endif

@@ -1,4 +1,3 @@
-//#include <libgame.h>
 #include "gsloading.h"
 #include "gsmainmenu.h"
 

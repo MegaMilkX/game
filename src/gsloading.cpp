@@ -84,9 +84,9 @@ void GSLoading::OnUpdate()
         SetCursorPos(rect.right / 2 + rect.left + x, rect.bottom / 2 + rect.top + y);
     }
     /*
-    if (time - start_time >= 5000)
+    if (ResourceQueueCount() == 0)
     {
-    GameState::Pop();
+		GameState::Pop();
     }*/
 }
 
