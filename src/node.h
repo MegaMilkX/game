@@ -61,8 +61,32 @@ public:
     quat Rotation() { return transform.Rotation(); }
     vec3f Scale() { return transform.Scale(); }
 
-    void Position(vec3f& position) { transform.Position(position); }
-    void Rotation(quat& rotation) { transform.Rotation(rotation); }
+    void Position(const vec3f& position, Space space = LOCAL)
+    { 
+        if (parent == 0)
+            space = LOCAL;
+
+        if(space == LOCAL)
+            transform.Position(position);
+        else if (space == WORLD)
+        {
+            vec3f pos = inverse(parent->GetTransform()) * vec4f(position.x, position.y, position.z, 1.0f);
+            transform.Position(pos);
+        }
+    }
+    void Rotation(const quat& rotation, Space space = LOCAL) 
+    {
+        if (parent == 0)
+            space = LOCAL;
+
+        if (space == LOCAL)
+            transform.Rotation(rotation);
+        /*else if (space == WORLD)
+        {
+            quat rot = inverse(parent->GetTransform()) * rotation;
+            transform.Rotation(rot);
+        }*/
+    }
 
     vec3f Forward();
     vec3f Back();

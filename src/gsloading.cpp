@@ -106,8 +106,8 @@ void GSLoading::OnRender()
         {
             Renderable* r = node->AddNode()->Add<Renderable>();
             r->Material(Resource<GFXMaterial>::Get("material2"));
-            vec3f pos = inverse(node->GetTransform()) * vec4f(point.x, point.y, point.z, 1.0f);
-            r->Position(pos);
+            r->Position(point, WORLD);
+            r->Rotation(node->Rotation(), LOCAL);
             r->Scale(0.1f);
         }
 

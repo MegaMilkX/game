@@ -24,8 +24,8 @@ public:
     quat Rotation() { return node->Rotation(); }
     vec3f Scale() { return node->Scale(); }
 
-    void Position(vec3f& position) { node->Position(position); }
-    void Rotation(quat& rotation) { node->Rotation(rotation); }
+    void Position(vec3f& position, Space space = LOCAL) { node->Position(position, space); }
+    void Rotation(quat& rotation, Space space = LOCAL) { node->Rotation(rotation, space); }
 
     vec3f Forward();
     vec3f Back();
