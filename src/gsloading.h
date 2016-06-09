@@ -8,6 +8,7 @@
 #include "gui.h"
 #include "scene.h"
 #include "renderable.h"
+#include "text-renderable.h"
 #include "camera.h"
 #include "lightomni.h"
 #include "bounding-shape.h"

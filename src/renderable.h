@@ -10,8 +10,20 @@
 
 DEF_ENTITY
 (
+	IRenderable,
+	Entity,
+	CONSTRUCTOR(),
+	PUBLIC
+	(
+		virtual void Render() {};
+	),
+	PROTECTED()
+);
+
+DEF_ENTITY
+(
     Renderable,
-    Entity,
+	IRenderable,
     CONSTRUCTOR
     (
         global_matrixmodel = GFXGlobal<mat4f>::Get("MatrixModel0");

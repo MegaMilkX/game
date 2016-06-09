@@ -66,4 +66,27 @@ protected:
         PROT \
     }
 
+#define ENTITY_BODY(NAME, BASE, CONSTRUCT) \
+	public: \
+	static NAME* Create(Scene* scene) \
+    { \
+        NAME* entity = new NAME(scene->Root()->AddNode()); \
+        return entity; \
+    } \
+    static NAME* Create(Node* node) \
+    { \
+        NAME* entity = new NAME(node); \
+        return entity; \
+    } \
+	protected: \
+	NAME(Node* node) : BASE(node) \
+    { \
+        Scene* scene = node->GetScene(); \
+        scene->AddEntityType(TypeInfo<NAME>::GetId(), this); \
+        node->Add<NAME>(this); \
+        CONSTRUCT \
+    }
+
+
+
 #endif

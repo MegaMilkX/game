@@ -40,6 +40,10 @@ void GSLoading::OnInit()
 
     LightOmni* omni = scene.Add<LightOmni>();
 
+	TextRenderable* paragraph = scene.Add<TextRenderable>();
+	paragraph->Text("Hello");
+	paragraph->Translate(0.0f, 1.0f, 0.0f);
+
     //GUIImage* gui_image = gui.AddElement<GUIImage>();
     //gui_image->
 

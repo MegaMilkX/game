@@ -72,14 +72,14 @@ DEF_ENTITY
 
         void Render()
         {
-            std::vector<Entity*> entities = node->GetScene()->GetEntitiesByType(TypeInfo<Renderable>::GetId());
+            std::vector<Entity*> entities = node->GetScene()->GetEntitiesByType(TypeInfo<IRenderable>::GetId());
             matrixview = inverse(node->GetTransform());
             matrixprojection = projection;
 
             for (unsigned int i = 0; i < entities.size(); ++i)
             {
                 Entity* entity = entities[i];
-                Renderable* renderable = (Renderable*)entity;
+				IRenderable* renderable = (IRenderable*)entity;
                 renderable->Render();
             }
 
