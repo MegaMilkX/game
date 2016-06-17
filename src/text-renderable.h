@@ -11,59 +11,36 @@ class TextRenderable : public IRenderable
 	ENTITY_BODY
 	(
 		TextRenderable, IRenderable,
-		CONSTRUCTOR()
+		CONSTRUCTOR
+		(
+
+		)
 	)
 
 public:
-	void Text(const std::string& txt)
+
+	void Font(ResHdl<GFXFont> fnt) { font = fnt; }
+
+	void Text(const std::string& txt, unsigned char size)
 	{
+		this->size = size;
 		text = txt;
-		std::vector<Vertex> vertices;
-		std::vector<unsigned short> indices;
-
-		float advance_x = 0.0f;
-		float advance_y = 0.0f;
-		unsigned short index = 0;
-
-		for (unsigned int i = 0; i < text.size(); ++i)
-		{
-			vertices.insert(vertices.end(),
-			{
-				{ vec3f(advance_x + -0.5f, advance_y + -0.5f, 0.0f), vec3f(0.5f, 0.1f, 0.1f), vec2f(1.0f, 0.0f) },
-				{ vec3f(advance_x + 0.5f, advance_y + -0.5f, 0.0f), vec3f(0.5f, 0.3f, 0.1f), vec2f(0.0f, 0.0f) },
-				{ vec3f(advance_x + 0.5f, advance_y + 0.5f, 0.0f), vec3f(0.5f, 0.1f, 0.1f), vec2f(0.0f, 1.0f) },
-				{ vec3f(advance_x + -0.5f, advance_y + 0.5f, 0.0f), vec3f(0.5f, 0.3f, 0.1f), vec2f(1.0f, 1.0f) }
-			});
-
-			//indices.insert(indices.end(), { 0, 1, 2, 2, 3, 0 });
-			indices.push_back(index + 0);
-			indices.push_back(index + 1);
-			indices.push_back(index + 2);
-			indices.push_back(index + 2);
-			indices.push_back(index + 3);
-			indices.push_back(index + 0);
-
-			index += 4;
-			advance_x += 1.0f;
-			advance_y += 0.0f;
-		}
-
-		mesh.SetVertices(vertices);
-		mesh.SetIndices(indices);
+		mesh = font->MakeString(txt, size);
 	}
 
 	void Render()
 	{
 		global_matrixmodel = node->GetTransform();
-		material.Bind();
+		font->Bind(size);
 		mesh.Render();
 	}
 
 protected:
+	unsigned char size;
 	std::string text;
 	GFXMesh mesh;
 	GFXGlobal<mat4f> global_matrixmodel;
-	GFXMaterial material;
+	ResHdl<GFXFont> font;
 };
 /*
 DEF_ENTITY
