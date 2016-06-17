@@ -1,4 +1,4 @@
-#include "gsloading.h"
+﻿#include "gsloading.h"
 
 void GSLoading::OnInit()
 {
@@ -11,26 +11,22 @@ void GSLoading::OnInit()
     camera = scene.Add<Camera>();
     camera->Translate(0.0f, 0.0f, 2.7f);
     camera->Rotate(0.7f, vec3f(0.0f, 1.0f, 0.0f));
-    //camera->Translate(-1.0f, 1.5f, -2.7f);
-    //camera->Rotate(0.5f, vec3f(0.0f, 1.0f, 0.0f));
-    //camera->Rotate(0.5f, vec3f(1.0f, 0.0f, 0.0f));
     camera->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
     //camera->Ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.01f, 100.0f);
 
     camera2 = scene.Add<Camera>();
-    camera2->Translate(0.0f, 0.0f, 2.7f);
-    camera2->Rotate(0.5f, vec3f(0.0f, 1.0f, 0.0f));
-    camera2->Rotate(0.5f, vec3f(1.0f, 0.0f, 0.0f));
-    camera2->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
+	camera2->Translate(0.0f, 0.0f, 1.0f);
+    //camera2->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
+	camera2->Ortho(0.0f, 1280, 0.0f, 720, 0.01f, 100.0f);
 
     cube = scene.Add<Renderable>();
-    cube->Mesh(Resource<GFXMesh>::Get("cube"));
-    cube->Material(Resource<GFXMaterial>::Get("material"));
+    cube->Mesh(Resource<GFXMesh>::Get("cube", BLOCKING));
+    cube->Material(Resource<GFXMaterial>::Get("material", BLOCKING));
     cube->Translate(-0.3f, 0.0f, 0.0f);
 
     cube2 = cube->GetNode()->AddNode()->Add<Renderable>();
     cube2->Translate(-1.4f, 0.0f, 0.0f);
-    cube2->Material(Resource<GFXMaterial>::Get("material"));
+    cube2->Material(Resource<GFXMaterial>::Get("material", BLOCKING));
 
     BSphere* s = cube->GetNode()->Add<BSphere>();
     s->Radius(0.7f);
@@ -40,10 +36,11 @@ void GSLoading::OnInit()
 
     LightOmni* omni = scene.Add<LightOmni>();
 
-	TextRenderable* paragraph = scene.Add<TextRenderable>();
-	paragraph->Text("Hello");
+	TextRenderable* paragraph = scene.Add<TextRenderable>();	
+	//paragraph->Font(Resource<GFXFont>::Get("magic", BLOCKING));
+	paragraph->Text("At the beginning of your upkeep, return an instant or sorcery card", 14);
 	paragraph->Translate(0.0f, 1.0f, 0.0f);
-
+	//Resource<GFXFont>::Get("magic", BLOCKING)->DebugDumpAtlasPNG();
     //GUIImage* gui_image = gui.AddElement<GUIImage>();
     //gui_image->
 
@@ -99,6 +96,9 @@ void GSLoading::OnRender()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     camera->Render();
+	camera2->Render();
+
+	//
 
     GFXGlobal<mat4f>::Get("MatrixModel0") = mat4f(1.0f);
     Node* node = 0;

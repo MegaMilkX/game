@@ -70,6 +70,7 @@ bool GameState::Init()
     Resource<GFXMaterial>::SetFallbackData(material);
 
     GFXTexture2D texture2d = GFXTexture2D::Create();
+
     unsigned char* data = new unsigned char[4 * 4 * 3];
     int divider = 2;
     int div_mod = 0;
@@ -93,6 +94,9 @@ bool GameState::Init()
     texture2d.Bitmap(data, 4, 4, 3);
     delete[] data;
     Resource<GFXTexture2D>::SetFallbackData(texture2d);
+
+	GFXFont font = GFXFont::Create();
+	Resource<GFXFont>::SetFallbackData(font);
     //===================
     
     return true;
