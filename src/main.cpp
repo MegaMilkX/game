@@ -1,4 +1,4 @@
-#include "gsloading.h"
+#include "gstest.h"
 #include "gsmainmenu.h"
 
 int main()
@@ -10,9 +10,9 @@ int main()
         return 0;
     
     GameState::Push<GSMainMenu>();
-    GameState::Push<GSLoading>();
+    GameState::Push<GSTest>();
     
-    while(GameState::Update()){}
+	while (GameState::Update());
     
     GameState::Cleanup();
     return 0;
