@@ -7,6 +7,8 @@
 #include "bounding-shape.h"
 #include <iostream>
 
+#include <algorithm>
+
 DEF_ENTITY
 (
     Camera,
@@ -72,26 +74,41 @@ DEF_ENTITY
 
         void Render()
         {
-            std::vector<Entity*> entities = node->GetScene()->GetEntitiesByType(TypeInfo<IRenderable>::GetId());
-            matrixview = inverse(node->GetTransform());
+			glClear(GL_DEPTH_BUFFER_BIT);
+
+            std::vector<IRenderable*>& renderables = node->GetScene()->GetEntities<IRenderable>();
+			
+			std::sort(renderables.begin(), renderables.end(), RenderablePtrCompare(this));
+
+			matrixview = inverse(node->GetTransform());
             matrixprojection = projection;
 
-            for (unsigned int i = 0; i < entities.size(); ++i)
+            for (unsigned int i = 0; i < renderables.size(); ++i)
             {
-                Entity* entity = entities[i];
-				IRenderable* renderable = (IRenderable*)entity;
-                renderable->Render();
+                renderables[i]->Render();
             }
 
-            glClear(GL_DEPTH_BUFFER_BIT);
-            
+            //glClear(GL_DEPTH_BUFFER_BIT);
+            /*
             std::vector<Entity*> shapes = node->GetScene()->GetEntitiesByType(TypeInfo<BoundingShape>::GetId());
             for (unsigned int i = 0; i < shapes.size(); ++i)
             {
                 BoundingShape* shape = (BoundingShape*)(shapes[i]);
                 shape->DebugRender();
             }
+			*/
         }
+
+		struct RenderablePtrCompare
+		{
+			RenderablePtrCompare(Camera* cam) : camera(cam) {}
+			inline bool operator() (IRenderable* a, IRenderable* b)
+			{
+				return distance(camera->GetNode()->Position(WORLD), a->GetNode()->Position(WORLD)) < distance(camera->GetNode()->Position(), b->GetNode()->Position());
+			}
+		private:
+			Camera* camera;
+		};
     ),
     PROTECTED
     (
