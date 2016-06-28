@@ -28,6 +28,8 @@ public:
     void AddEntityInstance(Entity* entity);
     void AddEntityType(int index, Entity* entity);
     //
+	template<typename T>
+	std::vector<T*>& GetEntities();
     std::vector<Entity*>& GetEntitiesByType(int typeindex);
     //
     Node* RayTest(const ray& r, vec3f& point);
@@ -54,6 +56,16 @@ ENTITY* Scene::Add()
 {
     ENTITY* entity = ENTITY::Create(this);
     return entity;
+}
+
+template<typename T>
+std::vector<T*>& Scene::GetEntities()
+{
+	std::vector<Entity*>& e = GetEntitiesByType(TypeInfo<T>::GetId());
+	void* ptr = &e;
+	std::vector<T*>& r = *(std::vector<T*>*)ptr;
+
+	return r;
 }
 
 #endif
