@@ -25,7 +25,7 @@ bool GameState::Init()
         return false;
     }
 
-    InputInit(window.GetHandle());
+    InputInit(window.GetHandle(), GameState::PostInput);
     
     Resource<GFXMesh>::AddSearchPath("data\\meshes");
     Resource<GFXShader>::AddSearchPath("data\\shaders");
@@ -98,6 +98,8 @@ bool GameState::Init()
 	GFXFont font = GFXFont::Create();
 	Resource<GFXFont>::SetFallbackData(font);
     //===================
+
+	
     
     return true;
 }
@@ -126,4 +128,9 @@ bool GameState::Update()
     
     GFXSwapBuffers();
     return window.Update();
+}
+
+void GameState::PostInput(InputEvent& e)
+{
+	state_stack.top()->OnInput(e);
 }

@@ -17,6 +17,8 @@ public:
     virtual void OnCleanup() = 0;
     virtual void OnUpdate() = 0;
     virtual void OnRender() = 0;
+
+	virtual void OnInput(InputEvent& e) {}
     
     static bool Init();
     static void Cleanup();
@@ -26,6 +28,8 @@ public:
     static void Pop();
 
     static bool Update();
+
+	static void PostInput(InputEvent& e);
 protected:
     static std::stack<GameState*> state_stack;
 	static std::map<int, GameState*> state_cache;
