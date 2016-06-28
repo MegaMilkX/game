@@ -57,7 +57,15 @@ public:
     void Scale(vec3f scale);
     void Scale(float scale);
 
-    vec3f Position() { return transform.Position(); }
+	vec3f Position(Space space = LOCAL) { 
+		if (space == LOCAL) 
+			return transform.Position(); 
+		else if (space == WORLD)
+		{
+			mat4f trans = GetTransform();
+			return trans[3];
+		}
+	}
     quat Rotation() { return transform.Rotation(); }
     vec3f Scale() { return transform.Scale(); }
 
