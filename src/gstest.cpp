@@ -1,10 +1,8 @@
-﻿#include "gsloading.h"
+﻿#include "gstest.h"
 
-void GSLoading::OnInit()
+void GSTest::OnInit()
 {
     start_time = GetTickCount();
-
-    gui.Init();
 
     GFXGlobal<int>::Get("Texture2D0") = 0;
 
@@ -14,10 +12,10 @@ void GSLoading::OnInit()
     camera->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
     //camera->Ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.01f, 100.0f);
 
-    camera2 = scene.Add<Camera>();
-	camera2->Translate(0.0f, 0.0f, 1.0f);
+    camera2d = scene2d.Add<Camera>();
+	camera2d->Translate(0.0f, 0.0f, 1.0f);
     //camera2->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
-	camera2->Ortho(0.0f, 1280, 0.0f, 720, 0.01f, 100.0f);
+	camera2d->Ortho(0.0f, 1280, 0.0f, 720, 0.01f, 100.0f);
 
     cube = scene.Add<Renderable>();
     cube->Mesh(Resource<GFXMesh>::Get("cube", BLOCKING));
@@ -36,24 +34,39 @@ void GSLoading::OnInit()
 
     LightOmni* omni = scene.Add<LightOmni>();
 
-	TextRenderable* paragraph = scene.Add<TextRenderable>();	
-	//paragraph->Font(Resource<GFXFont>::Get("magic", BLOCKING));
-	paragraph->Text("At the beginning of your upkeep, return an instant or sorcery card", 14);
-	paragraph->Translate(0.0f, 1.0f, 0.0f);
-	//Resource<GFXFont>::Get("magic", BLOCKING)->DebugDumpAtlasPNG();
-    //GUIImage* gui_image = gui.AddElement<GUIImage>();
-    //gui_image->
+	Sprite* spr = scene2d.Add<Sprite>();
+	spr->SetSprite("wallpaper", 0);
+	
+	sprite = scene2d.Add<Sprite>();
+	sprite->SetSprite("pika", 0);
+	sprite->Translate(950, 100, 0);
 
-    InputMouse::SetMoveCallback(ActCamMove(camera->GetNode()));
+	TextRenderable* paragraph = scene2d.Add<TextRenderable>();	
+	paragraph->Font("tahoma");
+	paragraph->Text(R"(Three Rings for the Elven-kings under the sky,
+Seven for the Dwarf-lords in halls of stone,
+Nine for Mortal Men, doomed to die,
+One for the Dark Lord on his dark throne
+In the Land of Mordor where the Shadows lie.
+
+One Ring to rule them all, One Ring to find them,
+One Ring to bring them all and in the darkness bind them.
+In the Land of Mordor where the Shadows lie.)");
+	//paragraph->Text("Discard your hand. Draw seven cards, then discard three cards at random.");
+	paragraph->Size(20);
+	paragraph->Align(GFXString::VCENTER | GFXString::HCENTER);
+	paragraph->Translate(640.0f, 360.0f, 0.0f);
+
+	
 }
 
-void GSLoading::OnSwitch()
+void GSTest::OnSwitch()
 {
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     InputShowCursor(false);
 }
 
-void GSLoading::OnUpdate()
+void GSTest::OnUpdate()
 {
     time = GetTickCount();
     cube->Rotate(0.01f, vec3f(0.0f, 1.0f, 0.0f));
@@ -91,30 +104,23 @@ void GSLoading::OnUpdate()
     }*/
 }
 
-void GSLoading::OnRender()
+void GSTest::OnRender()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
+	camera2d->Render();
     camera->Render();
-	camera2->Render();
-
+	
+	
 	//
+	/*
+	GFXGlobal<mat4f>::Get("MatrixModel0") = mat4f(1.0f);
 
-    GFXGlobal<mat4f>::Get("MatrixModel0") = mat4f(1.0f);
     Node* node = 0;
     vec3f point;
     node = scene.RayTest(camera->ScreenToWorld(vec2f(InputMouse::GetXNorm(), InputMouse::GetYNorm())), point);
     if (node)
     {
-        if (InputKB::Key(VK_SPACE))
-        {
-            Renderable* r = node->AddNode()->Add<Renderable>();
-            r->Material(Resource<GFXMaterial>::Get("material2"));
-            r->Position(point, WORLD);
-            r->Rotation(node->Rotation(), LOCAL);
-            r->Scale(0.1f);
-        }
-
         GFXGlobal<mat4f>::Get("MatrixView0") = inverse(camera->GetNode()->GetTransform());
         std::vector<vec3f> points;
         points.push_back(point - vec3f(0.5f, 0.0f, 0.0f));
@@ -125,9 +131,51 @@ void GSLoading::OnRender()
         points.push_back(point + vec3f(0.0f, 0.0f, 0.5f));
         line.Render(points);
     }
+	*/
 }
 
-void GSLoading::OnCleanup()
+void GSTest::OnInput(InputEvent& e)
+{
+	if (e.Event() == InputEvent::MOUSEMOVE)
+	{
+		camera->Rotate(InputMouse::GetXRel() * -0.005f, vec3f(0.0f, 1.0f, 0.0f), Space::WORLD);
+		camera->Rotate(InputMouse::GetYRel() * -0.005f, vec3f(1.0f, 0.0f, 0.0f), Space::LOCAL);
+	}
+	else if (e.Event() == InputEvent::DOWN)
+	{
+		if (e.KeyCode() == 0x01)
+		{
+			std::cout << "LOL" << std::endl;
+		}
+		else if (e.KeyCode() == 0x31)
+			sprite->SetSprite("pika", 0);
+		else if (e.KeyCode() == 0x32)
+			sprite->SetSprite("pika", 1);
+		else if (e.KeyCode() == 0x33)
+			sprite->SetSprite("pika", 2);
+		else if (e.KeyCode() == 0x34)
+			sprite->SetSprite("pika", 3);
+	}
+	else if (e.Event() == InputEvent::UP)
+	{
+		if (e.KeyCode() == VK_SPACE)
+		{
+			vec3f pt;
+			Node* node = scene.RayTest(ray(camera->Position(), camera->Forward()), pt);
+			if (node)
+			{
+				Renderable* r = node->AddNode()->Add<Renderable>();
+				r->Material(Resource<GFXMaterial>::Get("material2"));
+				r->Position(pt, WORLD);
+				r->Rotation(node->Rotation(), LOCAL);
+				r->Scale(0.1f);
+			}
+		}
+		
+	}
+}
+
+void GSTest::OnCleanup()
 {
 
 }
