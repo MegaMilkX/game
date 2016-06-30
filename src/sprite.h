@@ -13,6 +13,8 @@ class Sprite : public IRenderable
 		Sprite, IRenderable,
 		CONSTRUCTOR
 		(
+			global_matrixmodel = GFXGlobal<mat4f>::Get("MatrixModel0");
+			render_order = 0;
 		)
 	)
 
@@ -25,14 +27,18 @@ public:
 	{
 		sprite = GFXSprite(map, index);
 	}
+	void Order(int order) { render_order = order; }
 	void Render()
 	{
 		global_matrixmodel = node->GetTransform();
 		sprite.Render();
 	}
+	int RenderOrder() { return sprite.Material()->RenderOrder() + render_order; }
+	bool AlphaBlended() { return sprite.Material()->AlphaBlend(); }
 protected:
 	GFXSprite sprite;
 	GFXGlobal<mat4f> global_matrixmodel;
+	int render_order;
 };
 
 #endif

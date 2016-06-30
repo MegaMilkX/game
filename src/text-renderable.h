@@ -13,6 +13,8 @@ class TextRenderable : public IRenderable
 		TextRenderable, IRenderable,
 		CONSTRUCTOR
 		(
+			global_matrixmodel = GFXGlobal<mat4f>::Get("MatrixModel0");
+			render_order = 0;
 		)
 	)
 
@@ -32,15 +34,19 @@ public:
 	void Align(int align) { string.Align(align); }
 	void Text(const std::string& txt) { string = txt; }
 
+	void Order(int order) { render_order = order; }
+
 	void Render()
 	{
 		global_matrixmodel = node->GetTransform();
 		string.Render();
 	}
-
+	int RenderOrder() { return string.Material()->RenderOrder() + render_order; }
+	bool AlphaBlended() { return string.Material()->AlphaBlend(); }
 protected:
 	GFXString string;
 	GFXGlobal<mat4f> global_matrixmodel;
+	int render_order;
 };
 
 #endif

@@ -16,6 +16,8 @@ DEF_ENTITY
 	PUBLIC
 	(
 		virtual void Render() {};
+		virtual int RenderOrder() { return 0; }
+		virtual bool AlphaBlended() { return false; }
 	),
 	PROTECTED()
 );
@@ -39,6 +41,9 @@ DEF_ENTITY
             material->Bind();
             mesh->Render();
         }
+
+		int RenderOrder() { return material->RenderOrder(); }
+		bool AlphaBlended() { return material->AlphaBlend(); }
     ),
     PROTECTED
     (

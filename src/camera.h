@@ -74,6 +74,7 @@ DEF_ENTITY
 
         void Render()
         {
+			glDepthMask(GL_TRUE);
 			glClear(GL_DEPTH_BUFFER_BIT);
 
             std::vector<IRenderable*>& renderables = node->GetScene()->GetEntities<IRenderable>();
@@ -104,7 +105,22 @@ DEF_ENTITY
 			RenderablePtrCompare(Camera* cam) : camera(cam) {}
 			inline bool operator() (IRenderable* a, IRenderable* b)
 			{
-				return distance(camera->GetNode()->Position(WORLD), a->GetNode()->Position(WORLD)) < distance(camera->GetNode()->Position(), b->GetNode()->Position());
+				if (a->RenderOrder() == b->RenderOrder())
+				{
+					if (a->AlphaBlended() == b->AlphaBlended())
+					{
+						if (a->AlphaBlended() == false)
+							return distance(camera->GetNode()->Position(WORLD), a->GetNode()->Position(WORLD)) < distance(camera->GetNode()->Position(WORLD), b->GetNode()->Position(WORLD));
+						else if (a->AlphaBlended() == true)
+							return distance(camera->GetNode()->Position(WORLD), a->GetNode()->Position(WORLD)) > distance(camera->GetNode()->Position(WORLD), b->GetNode()->Position(WORLD));
+					}
+					else if (a->AlphaBlended() == false)
+						return true;
+					else if (a->AlphaBlended() == true)
+						return false;
+				}
+				else
+					return a->RenderOrder() < b->RenderOrder();
 			}
 		private:
 			Camera* camera;

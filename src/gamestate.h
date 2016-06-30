@@ -36,6 +36,9 @@ protected:
     static Window window;
 
 	int type_index;
+
+	static GFXString* fps_str;
+	static LARGE_INTEGER freq;
 };
 
 template<typename T>

@@ -4,6 +4,8 @@ std::stack<GameState*> GameState::state_stack;
 Window GameState::window;
 std::map<int, GameState*> GameState::state_cache;
 
+LARGE_INTEGER GameState::freq;
+
 struct Vert
 {
     VERTEX
@@ -99,7 +101,8 @@ bool GameState::Init()
 	Resource<GFXFont>::SetFallbackData(font);
     //===================
 
-	
+	fps_str = new GFXString();
+	QueryPerformanceFrequency(&freq);
     
     return true;
 }
@@ -118,13 +121,31 @@ void GameState::Pop()
     if(state_stack.size()>0)
         state_stack.top()->OnSwitch();
 }
-
+GFXString* GameState::fps_str;
 bool GameState::Update()
 {
+	LARGE_INTEGER t1, t2;
+
+	QueryPerformanceCounter(&t1);
+
     state_stack.top()->OnUpdate();
     
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     state_stack.top()->OnRender();
     
+	QueryPerformanceCounter(&t2);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	mat4f model = mat4f(1.0f);
+	translate(model, vec3f(10.0f, 500.0f, -1.0f));
+	GFXGlobal<mat4f>::Get("MatrixModel0") = model;
+	//GFXGlobal<mat4f>::Get("MatrixPerspective0") = ortho(0.0f, 1280, 0.0f, 720, 0.01f, 100.0f);
+	mat4f view = mat4f(1.0f);
+	translate(view, vec3f(0.0f, 0.0f, 1.0f));
+	//GFXGlobal<mat4f>::Get("MatrixView0") = view;
+	*fps_str = std::to_string((int)(1 / ((t2.QuadPart - t1.QuadPart) / (float)freq.QuadPart)));
+	fps_str->Align(GFXString::LEFT | GFXString::BOTTOM);
+	fps_str->Render();
     
     GFXSwapBuffers();
     return window.Update();

@@ -10,11 +10,9 @@ void GSTest::OnInit()
     camera->Translate(0.0f, 0.0f, 2.7f);
     camera->Rotate(0.7f, vec3f(0.0f, 1.0f, 0.0f));
     camera->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
-    //camera->Ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.01f, 100.0f);
 
     camera2d = scene2d.Add<Camera>();
 	camera2d->Translate(0.0f, 0.0f, 1.0f);
-    //camera2->Perspective(1.5f, 1280, 720, 0.1f, 100.0f);
 	camera2d->Ortho(0.0f, 1280, 0.0f, 720, 0.01f, 100.0f);
 
     cube = scene.Add<Renderable>();
@@ -24,7 +22,7 @@ void GSTest::OnInit()
 
     cube2 = cube->GetNode()->AddNode()->Add<Renderable>();
     cube2->Translate(-1.4f, 0.0f, 0.0f);
-    cube2->Material(Resource<GFXMaterial>::Get("material", BLOCKING));
+    cube2->Material(Resource<GFXMaterial>::Get("material3", BLOCKING));
 
     BSphere* s = cube->GetNode()->Add<BSphere>();
     s->Radius(0.7f);
@@ -56,8 +54,7 @@ In the Land of Mordor where the Shadows lie.)");
 	paragraph->Size(20);
 	paragraph->Align(GFXString::VCENTER | GFXString::HCENTER);
 	paragraph->Translate(640.0f, 360.0f, 0.0f);
-
-	
+	paragraph->Order(1);
 }
 
 void GSTest::OnSwitch()
@@ -97,6 +94,7 @@ void GSTest::OnUpdate()
         GetClientRect(window.GetHandle(), &rect);
         SetCursorPos(rect.right / 2 + rect.left + x, rect.bottom / 2 + rect.top + y);
     }
+
     /*
     if (ResourceQueueCount() == 0)
     {
@@ -105,9 +103,7 @@ void GSTest::OnUpdate()
 }
 
 void GSTest::OnRender()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+{	
 	camera2d->Render();
     camera->Render();
 	
