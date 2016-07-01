@@ -7,6 +7,8 @@
 
 #include <libgame.h>
 
+#include "debug-overlay.h"
+
 class GameState
 {
 public:
@@ -37,8 +39,7 @@ protected:
 
 	int type_index;
 
-	static GFXString* fps_str;
-	static LARGE_INTEGER freq;
+	static DebugOverlay debug_overlay;
 };
 
 template<typename T>
